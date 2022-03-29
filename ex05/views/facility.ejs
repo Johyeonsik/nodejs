@@ -1,0 +1,45 @@
+<table>
+    <td width=100 class="title">시설물이름</td>
+    <td><input type="text" id="name"></td>
+    <td><button id="btnInsert">등록</button></td>
+</table>
+<table id ="tbl"></table>
+
+<script id="temp_facility" type="text/x-handlebars-template">
+    <tr class="title">
+        <td witdh=50>번호</td>
+        <td width=200>시설물이름</td>
+        <td width=100>삭제</td>
+        <td width=100>수정</td>
+    </tr>
+    {{#each .}}
+    <tr class="row">
+        <td onclick="location.href='/camp/read?fid={{fid}}'" class="fid">{{fid}}</td>
+        <td><input type="text" class="name" value="{{name}}" size=50></td>
+        <td><button fid={{fid}} class="btnDelete">삭제</button></td>
+        <td><button fid={{fid}} class="btenUpdate">수정</button></td>
+    </tr>
+ 
+    {{/each}}
+</script>
+<script>
+    getFacility();
+
+    function getFacility(){
+    $.ajax({
+        type:"get",
+        dataType:"json",
+        url:"/facility/list",
+        success:function(data){
+            var template = Handlebars.compile($("#temp_facility").html());
+            $("#tbl").html(template(data));
+        }
+    });
+    }
+
+    $("#tbl").on("click", ".row button", function(){
+        var fid=$(this).attr('fid');
+        if(!confirm(`${fid}의 정보를 삭제하시겠습니까?`)) return;
+        location.href='/facility/delete?fid='+fid;
+    });
+</script>

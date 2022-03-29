@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel='stylesheet' href='/stylesheets/common.css' />
+    <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.js"></script>
+    <title><%=title%></title>
+</head>
+<body>
+    <div id="page">
+        <div id="center">
+            <h1><%=title%></h1>
+            <table id="camps"></table>
+            <script id="temp" type="text/x-handlebars-template">
+                <tr class="title">
+                    <td>번호</td>
+                    <td>캠핑장명</td>
+                    <td>캠핑장주소</td>
+                </tr>
+                {{#each .}}
+                <tr class="row">
+                    <td width=100>{{id}}</td>
+                    <td width=200>{{name}}</td>
+                    <td width=400>{{address}}</</td>
+                </tr>
+                {{/each}}
+            </script>
+        </div>
+    </div>
+</body>
+<script>
+    getCamps();
+    function getCamps(){
+        $.ajax({
+            type: "get",
+            dataType: "json",
+            url:"/camp/list",
+            success: function(data){
+                var template = Handlebars.compile($("#temp").html());
+                $("#camps").html(template(data));
+            }
+        });
+    }
+</script>
+</html>

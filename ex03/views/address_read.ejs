@@ -1,0 +1,133 @@
+<form name="frm" method="post" action="update">
+    <table>
+        <tr>
+            <td class ="title">번호</td>
+            <td width =500><input type="text" name ="id" value ="<%=vo.id%>"></td>
+            
+        </tr>
+        <tr>
+            <td class ="title">이름</td>
+            <td width =500><input type="text" name ="name" value ="<%=vo.name%>"></td>
+            
+        </tr>
+        <tr>
+            <td class ="title">전화</td>
+            <td width =500><input type="text" name ="tel"  value ="<%=vo.tel%>"></td>
+          
+        </tr>
+        <tr>
+            <td class ="title">주소</td>
+            <td width =500><input type="text" name ="address" size=50 value ="<%=vo.address%>"></td>
+        </tr>
+      
+    </table>
+    <div id = "button">
+        <input type="submit" value ="수정" class="button">
+        <input type="reset" value ="취소" class="button">
+        <input type="button" value ="삭제" class="button" id ="btnDelete">
+        <input type="button" value ="목록" class="button" id ="btnList">
+
+    </div>
+</form>
+<hr/>
+
+
+<h3><%=vo.name%>의 성적목록</h3>
+<table id="tbl"></table>
+<script id="temp" type="text/x-handlebars-template">
+    <tr class="title">
+        <td width=150>시험일</td>
+        <td width=70>국어</td>
+        <td width=70>영어</td>
+        <td width=70>수학</td>
+        <td width=70>총점</td>
+        <td width=70>평균</td>
+        <td width=50>수정</td>
+        <td width=50>삭제</td>
+    </tr>
+    {{#each.}}
+    <tr class="row">
+        <td class ="sdate">{{fdate}}</td>
+        <td><input type="text" value="{{kor}}" size="1" class ="kor"></td>
+        <td><input type="text" value="{{eng}}" size="1" class ="eng"></td>
+        <td><input type="text" value="{{mat}}" size="1" class ="mat"></td>
+        <td>{{tot}}</td>
+        <td>{{avg}}</td>
+        <td><button class="update">수정</button></td>
+        <td><button class="delete">삭제</button></td>
+    </tr>
+    {{/each}}
+</script>
+    
+</script>
+<script>
+    var id="<%=vo.id%>";
+    //성적수정버튼을 클릭한 경우
+    $("#tbl").on("click", ".row .update", function(){
+        var row=$(this).parent().parent();
+        var sdate=row.find(".sdate").html();
+        var kor=row.find(".kor").val();
+        var eng=row.find(".eng").val();
+        var mat=row.find(".mat").val();
+        var str=`${id}\n${sdate}\n${kor}\n${eng}\n${mat}`;
+        if(!confirm(str+ ' 수정하실래요?')) return;
+        $.ajax({
+            type: "post",
+            url: "/score/update",
+            data: {"id":id,"sdate":sdate,"kor":kor,"eng":eng,"mat":mat},
+            success:function(data){
+                alert("수정 완료!");
+                getScore();
+            }
+        })
+    });
+    //성적목록출력
+        getScore();
+    function getScore(){
+        $.ajax({
+            type: "get",
+            dataType: "json",
+            url: "/score/list",
+            data: {"id": id},
+            success: function(data){
+                var template = Handlebars.compile($("#temp").html());
+                $("#tbl").html(template(data));
+            }
+        });
+    }
+</script>
+<script>
+    $("#btnDelete").on("click",function(){
+        var id =$(frm.id).val();
+        if(!confirm(`${id}을(를) 삭제하시겠습니까?`)) return;
+        frm.action="delete";
+        frm.submit();
+    });
+    $("#btnList").on("click",function(){
+        location.href="/";
+    })
+    $(frm).on("submit",function(e){
+        e.preventDefault();
+        let name=$(frm.name).val();
+        let tel=$(frm.tel).val();
+        let address=$(frm.address).val();
+        if (name=="") {
+            alert("이름을 입력하세요");
+            $(frm.name).focus();
+        }else if (tel=="") {
+            alert("전화번호를 입력하세요");
+            $(frm.tel).focus();
+        }else if (address=="") {
+            alert("주소를 입력하세요");
+            $(frm.address).focus();
+        }else{
+            if(!confirm(`${name}-${tel}-${address} 를 수정하시겠습니까?`)) {
+                return;
+            }else {
+                frm.submit();
+            }
+            
+           
+        }
+    });
+</script>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><"현식이의 홈페이지"></title>
+    <link rel='stylesheet' href='/stylesheets/common.css' />
+    <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.js"></script>  
+  </head>
+  <body>
+   <div id ="page">
+     <div id ="top">
+       <h1>한빛미디어</h1>
+       <img src = "/images/back.jpg" width="960">
+       <div id ="menu">
+         <a href="/">Home</a>
+         <span style="float: right;">
+          <% if(userid!=null) { %>
+            <%=username%> <a href="/users/logout/">로그아웃</a></span>
+            
+          <% }else { %>
+            <a href="/users/login">로그인</a></span>
+          <% } %>
+        
+       </div>
+       <div id ="center">
+         <%-include(pageName)%>
+       </div>
+       <div id ="bottom">
+         <h5>Copyringht 2022. 한빛미디어 All Right Reversed</h5>
+       </div>
+     </div>
+   </div>
+  </body>
+</html>

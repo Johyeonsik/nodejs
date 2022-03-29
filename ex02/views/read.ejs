@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%=title%></title>
+    <link rel='stylesheet' href='/stylesheets/common.css' />
+    <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.js"></script>
+</head>
+<body>
+    <div id = "page">
+        <div id = "top">
+            <h1> <%=title%> </h1>
+        </div>
+        <div id = "center">
+            <form name = "frm" method="post" action="update">
+                <table>
+                    <tr>
+                        <td class="title" width=100>번호</td>
+                        <td width=500><input type="text" name="id" value="<%=vo.id%>" readonly></td>
+                    </tr>
+                    <tr>
+                        <td class="title" width=100>이름</td>
+                        <td width=500><input type="text" name="name" value="<%=vo.name%>"></td>
+                    </tr>
+                    <tr>
+                        <td class="title" width=100>전화번호</td>
+                        <td width=500><input type="text" name="tel"  value="<%=vo.tel%>"></td>
+                    </tr>
+                    <tr>
+                        <td class="title" width=100>주소</td>
+                        <td width=500><input type="text" name="address" size=50  value="<%=vo.address%>"></td>
+                    </tr>
+                </table>
+                <div id="button">
+                    <input type="submit" value="수정" class="button">
+                    <input type="reset" value="취소" class="button">
+                    <input type="button" value="삭제" class="button" id = "btnDelete"> 
+                    <input type ="button" value="목록" onClick ="location.href='/'" class="button">
+                </div>
+            </form>
+            <hr/>
+            <h1><%=vo.name%>의 성적</h1>
+            <table id="tbl"></table>
+            <script id="temp" type="text/x-handlebars-template">
+                <tr class="title">
+                  <td width=200>시험일</td>
+                  <td width=80>국어</td>
+                  <td width=80>영어</td>
+                  <td width=80>수학</td>
+                  <td width=80>총점</td>
+                  <td width=80>평균</td>
+                </tr>
+                {{#each.}}
+                <tr class="row" onclick="location.href='/address/read?id={{id}}'">
+                  <td>{{fdate}}</td>
+                  <td>{{kor}}</td>
+                  <td>{{eng}}</td>
+                  <td>{{mat}}</td>
+                  <td>{{tot}}</td>
+                  <td>{{avg}}</td>
+                </tr>
+                {{/each}}
+              </script>
+            
+        </div>
+    </div>
+</body>
+<script>
+    var id="<%=vo.id%>";
+        getScore();
+
+        function getScore(){
+            $.ajax({
+                type:"get",
+                dataType: "json",
+                url: "/address/score",
+                data:{"id": id},
+                success:function(data){
+                var template = Handlebars.compile($("#temp").html());
+                $("#tbl").html(template(data));
+                }
+            });
+        };
+    
+    
+
+    //삭제
+    $("#btnDelete").on("click", function(){
+        var id=$(frm.id).val();
+        if(!confirm(`${id}을(를) 삭제하시곘습니까?`)) return;
+        frm.action="delete";
+        frm.submit();
+    });
+    
+    $(frm).on("submit",function(e){
+        e.preventDefault();
+        let name=$(frm.name).val();
+        let tel=$(frm.tel).val();
+        let address=$(frm.address).val();
+        if(name=="") {
+            alert("이름을 입력하세요");
+            $(frm.name).focus();
+        }else if(tel=="") {
+            alert("전화번호을 입력하세요");
+            $(frm.name).focus();
+        }else if(address=="") {
+            alert("주소을 입력하세요");
+            $(frm.name).focus();
+        }else {
+            if(!confirm(`${name}:${tel}:${address}을(를) 수정하시겠습니까?`)) return;
+            frm.submit();
+        }
+
+    });
+</script>
+</html>

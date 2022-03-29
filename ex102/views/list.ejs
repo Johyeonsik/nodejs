@@ -1,0 +1,32 @@
+<div id ="container" style="width: 900px;"></div>
+<script id="temp" type="text/x-handlebars-template">
+    {{#each .}}
+        <div class="box" style ="width: 180px;">
+            <img src="{{image}}" style="width: 160px;">
+            <div class ="stitle">{{code}}:{{title}}</div>
+            <div class ="stitle">{{fprice}}</div>
+        </div>
+    {{/each}}
+</script>
+
+<div id = "button">
+    <button id ="prev">이전</button>
+    <span id = "curpage">1</span>
+    <button id ="next">다음</button>
+</div>
+
+<script>
+    getFood();
+
+    function getFood(){
+        $.ajax({
+            type:"get",
+            dataType:"json",
+            url:"/food/list",
+            success:function(data){
+                var template = Handlebars.compile($("#temp").html());
+                $("#container").html(template(data));
+            }
+        });
+    }
+</script>

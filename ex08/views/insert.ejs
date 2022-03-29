@@ -1,0 +1,61 @@
+<form name="frm" method="post" action="insert" enctype="multipart/form-data">
+    <table>
+        <tr>
+            <td width=100>상품명</td>
+            <td width=500><input type="text" name="title" size="50"></td>
+        </tr>
+        <tr>
+            <td width=100>상품가격</td>
+            <td width=500><input type="text" name="price" size="10">원</td>
+        </tr>
+        <tr>
+            <td width=100>이미지</td>
+            <td>
+                <img src="http://placehold.it/150x170" id="image" width=150 style="cursor:pointer;">
+                <input type="file" name="image" style="display:none; ">
+            </td>
+
+        </tr>
+    </table>
+    <div id = "button">
+        <input type="submit" value="상품등록" class="button">
+        <input type="reset" value="상품취소" class="button">
+        <input type="button" value="목록" class="button" onclick="location.href='/'">
+    </div>
+</form>
+<script>
+    //submit될때
+    $(frm).on("submit",function(e){
+        e.preventDefault();
+        var title=$(frm.title).val();
+        var price=$(frm.price).val();
+        var image=$(frm.image).val();
+        if(title==""){
+            alert("상품이름을 등록하세요");
+            $(frm.title).focus();
+        }else if(price=="") {
+            alert("상품가격을 등록하세요");
+            $(frm.price).focus();
+        }else if(image=="") {
+            alert("상품 이미지를 등록하세요");
+        }else{
+            if(!confirm("상품을 등록하실래요?")) return;
+            frm.submit();
+        }
+    });
+       //이미지를 클릭한경우
+       $("#image").on("click", function(){
+        $(frm.image).click();
+    });
+
+    //이미지 미리보기
+    $(frm.image).on("change", function(e){
+        var reader=new FileReader();
+        reader.readAsDataURL(this.files[0])
+        reader.onload=function(e){
+            $("#image").attr("src", e.target.result);
+        }
+    
+    });
+
+</script>

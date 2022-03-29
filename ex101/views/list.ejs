@@ -1,0 +1,55 @@
+
+<!--리스트 만들기-->
+<div id ="container"></div>
+<script id="temp" type="text/x-handlebars-template">
+{{#each .}}
+<div class='box'>
+    <img src ="http://placehold.it/170x150">
+    <div>{{code}}</div>
+    <div>{{name}}</div>
+    <div>{{price}}원</div>
+</div>
+{{/each}}
+</script>
+
+
+
+<!--페이지버튼-->
+<div id ="button">
+    <button id ="prev">이전</button>
+    <span id = "curpage">1</span>
+    <button id ="next">다음</button>
+</div>
+
+
+<script>
+    var page=1;
+
+    getProduct();
+
+    //이전버튼 클릭 시 
+    $("#prev").on("click",function(){
+        page--;
+        getProduct();
+    });
+    //이전버튼 클릭 시 
+    $("#prev").on("click",function(){
+       page++;
+       getProduct();
+    });
+
+    //리스트 데이터 뿌려주기
+    function getProduct(){
+        $.ajax({
+            type:"get",
+            dataType:"json",
+            url:"/product/list",
+            success:function(data){
+                var template = Handlebars.compile($("#temp").html());
+                $("#container").html(template(data));
+
+            }
+        });
+    }
+    
+</script>

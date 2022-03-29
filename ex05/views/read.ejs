@@ -1,0 +1,353 @@
+<form name="frm" method="post" action="update">
+    <table>
+        <tr>
+            <td width=100 class = "title">캠핑장번호</td>
+            <td width=500><input type="text" name="cid" readonly value="<%=vo.cid%>"></td>
+        </tr>
+        <tr>
+            <td width=100 class = "title">캠핑장이름</td>
+            <td width=500><input type="text" name="name" value="<%=vo.name%>"></td>
+        </tr>
+        <tr>
+            <td width=100 class = "title">캠핑장전화</td>
+            <td width=500><input type="text" name="tel" value="<%=vo.tel%>"></td>
+        </tr>
+        <tr>
+            <td width=100 class = "title">캠핑장주소</td>
+            <td width=500><input type="text" name="address" value="<%=vo.address%>"></td>
+        </tr>
+    </table>
+    <div id="button">
+        <input type="submit" value="수정" class="button">
+        <input type="reset" value="취소" class="button">
+        <input type="button" value="목록" class="button" onclick="location.href='/'">
+    </div>
+</form>
+<!--캠핑장별 스타일-->
+<table>
+    <tr>
+        <td colspan="2">
+            <select id="style_all" style="height: 25px; width: 150px;"></select>&nbsp;
+            <button>등록</button>
+        </td>
+    </tr>
+    <tr>
+        <td width=100 class="title">스타일</td>
+        <td width=500 id="style"></td>
+    </tr>
+</table>
+<script id="temp_style_all" type="text/x-handlebars-template">
+    {{#each .}}
+    <option>{{name}}</option>&nbsp;
+    &nbsp;&nbsp;&nbsp;
+    {{/each}}
+</script>
+<script id="temp_style" type="text/x-handlebars-template">
+    {{#each .}}
+    <span class="small">{{name}}</span>&nbsp;
+    <button style="background: rgb(58, 58, 58); color: white; width: 50px; height: 25px; font-size: 8px;">삭제</button>
+    &nbsp;&nbsp;&nbsp; 
+    {{/each}}
+</script>
+
+<table>
+    <tr>
+        <td colspan="2">
+            <select id="facility_all" style="height: 25px; width: 150px;"></select>&nbsp;
+            <button>등록</button>
+        </td>
+    </tr>
+    <tr>
+        <td width=100 class="title">시설물</td>
+        <td width=500 id="facility"></td>
+    </tr>
+</table>
+<script id="temp_facility_all" type="text/x-handlebars-template">
+    {{#each .}}
+    <option>{{name}}</option>&nbsp;
+    &nbsp;&nbsp;&nbsp;
+    {{/each}}
+</script>
+<script id="temp_facility" type="text/x-handlebars-template">
+    {{#each .}}
+    <span>{{name}}</span>
+    <button style="background: rgb(58, 58, 58); color: white; width: 50px; height: 25px; font-size: 8px;">삭제</button>
+    &nbsp;<form name="frm" method="post" action="update">
+        <table>
+            <tr>
+                <td width=100 class="title">캠핑장번호</td>
+                <td width=500><input type="text" name="cid" readonly value="<%=vo.cid%>"></td>
+            </tr>
+            <tr>
+                <td width=100 class="title">캠핑장이름</td>
+                <td width=500><input type="text" name="name" value="<%=vo.name%>"></td>
+            </tr>
+            <tr>
+                <td width=100 class="title">캠핑장전화</td>
+                <td width=500><input type="text" name="tel" value="<%=vo.tel%>"></td>
+            </tr>
+            <tr>
+                <td width=100 class="title">캠핑장주소</td>
+                <td width=500><input type="text" name="address" value="<%=vo.address%>"></td>
+            </tr>
+        </table>
+        <div id="buttons">
+            <input type="submit" value="수정" class="button">
+            <input type="reset"  value="취소" class="button">
+            <input type="button" value="목록" class="button" onclick="location.href='/'">
+        </div>
+    </form>
+    <!--캠핑장별 스타일-->
+    <table>
+        <tr>
+            <td colspan="2">
+                <select id="style_all" style="height:25px;width:200px"></select>
+                <button id="style_insert">등록</button>
+            </td>
+        </tr>
+        <tr>
+            <td width=100 class="title">스타일</td>
+            <td width=500 id="style"></td>
+        </tr>
+    </table>
+    <!--캠핑장별 스타일-->
+    <script id="temp_style" type="text/x-handlebars-template">
+        {{#each .}}
+        <sapn>{{name}}</sapn> 
+        <span class="small" sid="{{sid}}"">삭제</span>
+        {{/each}}
+    </script>
+    <script id="temp_style_all" type="text/x-handlebars-template">
+        {{#each .}}
+        <option value="{{sid}}">{{name}}</option>
+        {{/each}}
+    </script>
+    
+    <!--캠핑장별 시설물-->
+    <table>
+        <tr>
+            <td colspan="2">
+                <select id="facility_all" style="height:25px;width:200px"></select>
+                <button id="facility_insert">등록</button>
+            </td>
+        </tr>
+        <tr>
+            <td width=100 class="title">시설물</td>
+            <td width=500 id="facility"></td>
+        </tr>
+    </table>
+    <!--캠핑장별 시설물-->
+    <script id="temp_facility" type="text/x-handlebars-template">
+        {{#each .}}
+        <sapn>{{name}}</sapn> 
+        <sapn class="small" fid="{{fid}}">삭제</sapn>
+        {{/each}}
+    </script>
+    <script id="temp_facility_all" type="text/x-handlebars-template">
+        {{#each .}}
+        <option value="{{fid}}">{{name}}</option>
+        {{/each}}
+    </script>
+    
+    <script>
+        var cid=$(frm.cid).val();
+    
+        //스타일삭제 버튼을 클릭한 경우
+        $("#style").on("click", ".small", function(){
+            var sid=$(this).attr("sid");
+            if(!confirm(`${cid}:${sid} 삭제?`)) return;
+            $.ajax({
+                type:"post",
+                url:"/style/camp/delete",
+                data:{cid:cid, sid:sid},
+                success:function(){
+                    getStyle();
+                }
+            })
+        });
+    
+        //스타일등록 버튼을 클릭한경우
+        $("#style_insert").on("click", function(){
+            var sid=$("#style_all").val();
+            if(!confirm(`${cid}:${sid} 등록?`)) return;
+            $.ajax({
+                type:"post",
+                url:"/style/camp/insert",
+                data:{cid:cid, sid:sid},
+                success:function(){
+                    getStyle();
+                }
+            })
+        });
+    
+        //시설물삭제 버튼을 클릭한 경우
+        $("#facility").on("click", ".small", function(){
+            var fid=$(this).attr("fid");
+            if(!confirm(`${cid}:${fid} 삭제?`)) return;
+            $.ajax({
+                type:"post",
+                url:"/facility/camp/delete",
+                data:{cid:cid, fid:fid},
+                success:function(){
+                    getFacility();
+                }
+            })
+        });
+    
+        //시설물등록 버튼을 클릭한경우
+        $("#facility_insert").on("click", function(){
+            var fid=$("#facility_all").val();
+            if(!confirm(`${cid}:${fid} 등록?`)) return;
+            $.ajax({
+                type:"post",
+                url:"/facility/camp/insert",
+                data:{cid:cid, fid:fid},
+                success:function(){
+                    getFacility();
+                }
+            })
+        });
+    
+        //캠핑장별 시설물출력
+        getFacility();
+        function getFacility(){
+            $.ajax({
+                type:"get",
+                dateType:"json",
+                url:"/facility/camp",
+                data:{cid:cid},
+                success:function(data){
+                    var template = Handlebars.compile($("#temp_facility").html());
+                    $("#facility").html(template(data));
+                }
+            });
+        }
+    
+        //캠핑장별 스타일출력
+        getStyle();
+        function getStyle(){
+            $.ajax({
+                type:"get",
+                dateType:"json",
+                url:"/style/camp",
+                data:{cid:cid},
+                success:function(data){
+                    var template = Handlebars.compile($("#temp_style").html());
+                    $("#style").html(template(data));
+                }
+            });
+        }
+    
+        //스타일목록
+        $.ajax({
+            type:"get",
+            dateType:"json",
+            url:"/style/list",
+            success:function(data){
+                var template = Handlebars.compile($("#temp_style_all").html());
+                $("#style_all").html(template(data));
+            }
+        });
+    
+        //시설물목록
+        $.ajax({
+            type:"get",
+            dateType:"json",
+            url:"/facility/list",
+            success:function(data){
+                var template = Handlebars.compile($("#temp_facility_all").html());
+                $("#facility_all").html(template(data));
+            }
+        });
+    
+        $(frm).on("submit", function(e){
+            e.preventDefault();
+            var name=$(frm.name).val();
+            var tel=$(frm.tel).val();
+            var address=$(frm.address).val();
+            if(name==""){
+                alert("캠핑장명을 입력하세요!");
+                $(frm.name).focus();
+            }else if(tel==""){
+                alert("캠핑장 전화번호를 입력하세요!");
+                $(frm.tel).focus();
+            }else if(address==""){
+                alert("캠핑장 주소를 입력하세요!");
+                $(frm.address).focus();
+            }else{
+                if(!confirm(`${name}:${tel}:${address} 수정?`)) return;
+                frm.submit();
+            }
+        });
+    </script>
+    &nbsp;&nbsp;&nbsp;
+    {{/each}}
+</script>
+<script>
+    var cid = $(frm.cid).val();
+    // 스타일
+    $.ajax({
+        type:"get",
+        dataType:"json",
+        url:"/style/camp",
+        data:{cid:cid},
+        success:function(data){
+            var template = Handlebars.compile($("#temp_style").html());
+            $("#style").html(template(data));
+        }
+    });
+
+    //스타일등록목록
+    $.ajax({
+        type:"get",
+        dataType:"json",
+        url:"/style/list",
+        success:function(data){
+            var template = Handlebars.compile($("#temp_style_all").html());
+            $("#style_all").html(template(data));
+        }
+    });
+
+    // 시설물
+    $.ajax({
+        type:"get",
+        dataType:"json",
+        url:"/facility/camp",
+        data:{cid:cid},
+        success:function(data){
+            var template = Handlebars.compile($("#temp_facility").html());
+            $("#facility").html(template(data));
+        }
+    });
+
+    //시설물등록목록
+    $.ajax({
+    type:"get",
+    dataType:"json",
+    url:"/facility/list",
+    success:function(data){
+        var template = Handlebars.compile($("#temp_facility_all").html());
+        $("#facility_all").html(template(data));
+    }
+    });
+
+   $(frm).on("submit",function(e){
+        e.preventDefault();
+        var name=$(frm.name).val();
+        var tel=$(frm.tel).val();
+        var address=$(frm.address).val();
+        if(name=="") {
+            alert("캠핑장명을 입력하세요.");
+            $(frm.name).focus();
+        }else if(tel=="") {
+            alert("전화번호를 입력하세요.");
+            $(frm.tel).focus();
+        }else if(address=="") {
+            alert("주소를 입력하세요.");
+            $(frm.address).focus();
+        }else{
+            if(!confirm(`${name}:${tel}:${address} 수정하시겠습니까? `)) return;
+            frm.submit();
+        }
+    });
+</script>

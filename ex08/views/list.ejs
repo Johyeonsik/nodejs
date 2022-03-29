@@ -1,0 +1,55 @@
+<div id = "container" style="width: 900px;"></div>
+<script id="temp" type="text/x-handlebars-template">
+    {{#each rows}}
+    <div class ="box" style="width: 200px; margin-left: 20px;">
+        <img src ="/images/{{image}}" width="180" class="img" onclick="location.href='jewelry/read?code={{code}}'">
+        <div class ="stitle"><span style="font-weight: bold;">[{{code}}]</span>{{title}}</div>
+        <div>{{fprice}}원</div>
+    </div>
+    {{/each}}
+</script>
+<div id="button">
+    <button id = "prev">이전</button>
+    <span id = "curpage"></span>
+    <button id = "next">다음</button>
+</div>
+<script>
+    var page = 1;
+    getJewelry();
+
+    $("#prev").on("click",function(){
+        page--;
+        getJewelry();
+    });
+    $("#next").on("click",function(){
+        page++;
+        getJewelry();
+    });
+    function getJewelry(){
+        $.ajax({
+            type:"get",
+            dataType:"json",
+            url:"/jewelry/list",
+            data:{page:page},
+            success:function(data){
+                var template = Handlebars.compile($("#temp").html());
+                $("#container").html(template(data));
+                $("#curpage").html(page);
+                var total=data.total;
+                var lastPage=Math.ceil(total/4);
+                $("#curpage").html(page +"/"+lastPage);
+
+                if(page==1){
+                    $("#prev").attr("disabled",true);
+                }else{
+                    $("#prev").attr("disabled",false);
+                }
+                if(page==lastPage){
+                    $("#next").attr("disabled",true);
+                }else{
+                    $("#next").attr("disabled",false);
+                }
+            }
+        });
+    }
+</script>

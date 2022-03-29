@@ -1,0 +1,56 @@
+<div id ="container" style="width: 900px;"></div>
+
+<script id="temp" type="text/x-handlebars-template">
+    {{#each rows}}
+    <div class="box" style="width: 180px;">
+        <img src="{{image}}" style="width: 160px;" onclick="location.href='/food/read?code={{code}}'">
+        <div class ="stitle" style="font-weight: bold;">{{code}}:{{title}}</div>
+        <div class ="stitle">{{fprice}}원</div>
+    </div>
+    {{/each}}
+</script>
+<div id ="button">
+    <button id = "prev">이전</button>
+    <span id = "curpage">1</span>
+    <button id = "next">다음</button>
+</div>
+<script>
+    var page=1;
+    getFood();
+
+    $('#prev').on("click",function(){
+        page--;
+        getFood();
+    });
+
+    $('#next').on("click",function(){
+        page++;
+        getFood();
+    })
+
+    function getFood(){
+        $.ajax({
+            type:"get",
+            dataType:"json",
+            url:"/food/list",
+            data:{page:page},
+            success:function(data){
+            var template = Handlebars.compile($("#temp").html());
+            $("#container").html(template(data));
+            var total=data.total;
+            var lastPage=Math.ceil(total/4);            //math.ceil 올림함수
+            $("#curpage").html(page + "/" +lastPage);
+            if(page==1) {
+                $("#prev").attr("disabled",true);       //.attr 속성
+            }else{
+                $("#prev").attr("disabled",false);
+            }
+            if(page==lastPage) {
+                $("#next").attr("disabled",true);
+            }else{
+                $("#next").attr("disabled",false);
+            }
+            }
+        });
+    }
+</script>

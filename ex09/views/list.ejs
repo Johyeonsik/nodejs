@@ -1,0 +1,71 @@
+
+<div id = "condition" style="padding-bottom: 20px; margin: 0px auto; text-align: center;">
+    <input type="text" placeholder="검색어" id="word">
+    <button id = "search">검색</button>
+    검색데이터:<span id ="total" ></span>건
+    
+</div>
+<div id ="container" style="width: 900;"></div>
+<script id="temp" type="text/x-handlebars-template">
+    {{#each rows}}
+    <div class = "box" style="width: 200px;">
+        <img src="/images/{{image}}" style="width: 180px;" onclick="location.href='/food/read?code={{code}}'">
+        <div class ="stitle" style="font-weight: bold;">[{{code}}]{{title}}</div>
+        <div class ="stitle" style="color:navy">{{price}}원</div>
+    </div>
+    {{/each}}
+</script>
+<div id = "button">
+    <button id="prev">이전</button>
+    <span id = "curpage"></span>
+    <button id = "next">다음</button>
+</div>
+<script>
+    var page =1;
+    var word=$("#word").val();
+    getFood();
+
+    $("#word").on('keydown',function(e){
+        if(e.keyCode==13) $("#search").click();
+    });
+    $("#search").on("click",function(){
+        word=$("#word").val();
+        page=1;
+        getFood();
+
+    });
+
+    $("#prev").on("click",function(){
+        page--;
+        getFood();
+    });
+    $("#next").on("click",function(){
+        page++;
+        getFood();
+    }) ;
+   /* $("#last").on("click",function(){
+        var lastPage=Math.ceil(data.total/8);
+        page=lastPage;
+        getFood();
+    }) ;
+    */
+    
+
+    function getFood(){
+        $.ajax({
+            data:"get",
+            dataType:"json",
+            url:"/food/list",
+            data:{page:page,word:word},
+            success:function(data){
+                var template = Handlebars.compile($("#temp").html());
+                $("#container").html(template(data));
+                $("#curpage").html(page);
+                var lastPage=Math.ceil(data.total/8);
+                $("#curpage").html(page+"/"+lastPage);
+                $("#total").html(data.total);
+            }
+        });
+    }
+ 
+</script>

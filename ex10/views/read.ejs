@@ -1,0 +1,133 @@
+<style>
+    #book {
+        width: 900px;
+        overflow: hidden;
+        margin: 0px auto;
+    }
+    #book .image{ width: 400px; float: left;}
+    #book .info{width: 400px; float: left; margin-left: 50px;}
+    hr {margin: 20px 0px;}
+    li {margin: 20px;}
+</style>
+<div id = "book">
+    <div class = "image">
+        <img src="/images/<%=vo.image%>" width="400">
+    </div>
+    <div class = "info" >
+        <h3>[<%=vo.code%>] <%=vo.title%></h3>
+        <hr>
+        <ul style="font-size: 20px;">
+            <li>가격: <%=vo.fprice%>원</li>
+            <li>출간: 2020. 01. 01</li>
+            <li>페이지: 500페이지</li>
+            <li>물류코드: 2552</li>
+        </ul>
+        <hr>
+        <div id ="paybutton"> 
+            <button class="button" style="float: left; width: 150px; height: 50px; border: 5px solid coral;">바로구매</button>
+            <button class="button" style="float: left; margin-left: 20px; width: 150px; height: 50px; border: 5px solid coral" >장바구니</button>
+        </div>
+    </div>
+</div>
+<div style =" width: 900px; margin: 0px auto; margin-top: 20px; text-align: center;">
+    <div>
+        <textarea id= "text" cols="115" rows="5" style="padding: 20px;"></textarea>
+        <button id = "btnInsert" style="float: right;">리뷰쓰기</button>
+    </div>
+    
+</div>
+
+<div id ="review"></div>
+<script id="temp" type="text/x-handlebars-template">
+   {{#each .}}
+    <div style="width: 900px;font-size: 13px; padding:15px;"> 
+        {{uid}} | {{name}} | {{fdate}}
+    </div>
+    <div style="width: 900px;border-bottom: dotted 1px gray; padding:15px; font-size: 15px;">
+        {{text}}
+        <span>
+            <button class="{{display uid}}" reviewid="{{id}}">삭제</button></span>
+    </div>
+   {{/each}}
+</script>
+<script>
+    Handlebars.registerHelper("display",function(uid){
+        if (uid == "<%=userid%>") {
+            return "small"
+        }else {
+            return "noneSmall"
+        }
+    });
+</script>
+    
+<script>
+    var code="<%=vo.code%>";
+    var userid="<%=userid%>";
+    getBook();
+    
+    if(userid==""){
+        $("#text").hide();
+    }else{
+        $("#text").show();
+    }
+    //삭제버튼을 클릭한경우
+    $("#review").on("click","button",function(){
+        var id =$(this).attr("reviewid");
+        if(!confirm(id+"을(를) 삭제하실래요? ")) return;
+        $.ajax({
+            type:"post",
+            url:"/review/delete",
+            data:{id:id},
+            success:function(){
+                alert("리뷰삭제완료");
+                getBook();
+            }
+        })
+    });
+        
+    
+    $("#btnInsert").on("click",function(){
+        
+        if(userid=="") {
+            alert("로그인 후 리뷰를 작성하세요");
+            location.href="/users/login";
+        }else {
+            //리뷰작성
+            var text =$("#text").val();
+            if(text==""){
+                alert("리뷰내용을 입력하세요 ")
+            }else {
+                if(!confirm(`${code}-${userid}-${text}`)) return;
+                $.ajax({
+                    type:"post",
+                    url:"/review/insert",
+                    data:{code:code, uid:userid, text:text},
+                    success:function(){
+                        alert("리뷰등록완료");
+                        getBook();
+                        $("#text").val("");
+                    }
+                });
+            }
+        }
+    });
+
+    function getBook(){
+        $.ajax({
+            data:"get",
+            dataType:"json",
+            url:"/review/list",
+            data:{code:code},
+            success:function(data){
+                
+            var template = Handlebars.compile($("#temp").html());
+            $("#review").html(template(data));
+            
+            
+            
+            }
+        });
+    }
+
+    
+</script>

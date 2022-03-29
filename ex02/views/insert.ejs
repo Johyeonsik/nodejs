@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%=title%></title>
+    <link rel='stylesheet' href='/stylesheets/common.css' />
+    <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+</head>
+<body>
+    <div id = "page">
+        <div id = "top">
+            <h1> <%=title%> </h1>
+        </div>
+        <div id = "center">
+            <form name = "frm" method="post">
+                <table>
+                    <tr>
+                        <td class="title" width=100>이름</td>
+                        <td width=500><input type="text" name="name"></td>
+                    </tr>
+                    <tr>
+                        <td class="title" width=100>전화번호</td>
+                        <td width=500><input type="text" name="tel"></td>
+                    </tr>
+                    <tr>
+                        <td class="title" width=100>주소</td>
+                        <td width=500><input type="text" name="address" size=50></td>
+                    </tr>
+                </table>
+                <div id="button">
+                    <input type="submit" value="저장" class="button">
+                    <input type="reset" value="취소" class="button">
+                    <input type ="button" value="목록" onClick ="location.href='/'" class="button">
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+<script>
+    $(frm).on("submit",function(e){
+        e.preventDefault();
+        let name=$(frm.name).val();
+        let tel=$(frm.tel).val();
+        let address=$(frm.address).val();
+        if(name=="") {
+            alert("이름을 입력하세요");
+            $(frm.name).focus();
+        }else if(tel=="") {
+            alert("전화번호을 입력하세요");
+            $(frm.name).focus();
+        }else if(address=="") {
+            alert("주소을 입력하세요");
+            $(frm.name).focus();
+        }else {
+            if(!confirm(`${name}:${tel}:${address}을(를) 저장하시겠습니까?`)) return;
+            frm.submit();
+        }
+
+    });
+</script>
+</html>

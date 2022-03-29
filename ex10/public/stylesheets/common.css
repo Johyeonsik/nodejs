@@ -1,0 +1,83 @@
+*{margin:0px; padding: 0px;}
+body {width:960px; margin: 0px auto; } 
+#page{border: white;}
+h1,h5,h3 {text-align: center; padding-top: 50px; color: rgb(92, 91, 91);}
+table{margin: 0px auto; margin-top: 50px; border-collapse: collapse;}
+th {border: 1px solid grey;padding:10px; font-size: 12px; font-weight: bold;}
+td {border: 1px solid grey;padding:10px; font-size: 12px;}
+.title {text-align: center; font-weight: bold; background: rgb(216, 185, 165) ;color: rgb(17, 17, 17);}
+
+.row{text-align: center;}
+#button {width:600px; margin:0px auto; text-align:center; padding:10px;}
+.button, button {
+    width: 80px;
+    padding: 5px;
+    background:rgb(245, 165, 128);
+    color:white;
+    border-radius: 5px;
+    border: none;
+    cursor:pointer;
+}
+input[type="text"] {padding: 5px; border:1px solid gray;}
+input[type="password"] {padding: 5px; border:1px solid gray;}
+
+#menu {
+    width:100%; 
+    height:40px; 
+    border-bottom: dotted 1px grey;
+    border-top: dotted 1px grey;
+    text-align:left; 
+    margin-top: 20px;
+    padding-top: 10px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+}
+#menu a{
+    text-decoration: none; 
+    color:rgb(92, 91, 91); 
+    font-size:15px; 
+    margin: 10px; 
+    float: left;
+}
+.stitle, .box{
+    
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;  /* 말줄임 적용 */
+    font-size: 12px;
+   
+   
+  }
+  #container {width: 900px; overflow: hidden; margin: 0px auto;}
+  .box{
+      float:left;
+      width: 160px; 
+      height: 200px; 
+      border: 2px solid rgb(247, 219, 219); 
+      margin-left:  10px; 
+      border-radius: 10px; 
+      margin-bottom: 10px; 
+      background: rgb(252, 246, 246);}
+  .box img{cursor: pointer;}
+
+#button :disabled {
+    width: 80px;
+    padding: 5px;
+    background:rgb(109, 109, 109);
+    color:white;
+    border-radius: 5px;
+    border: none;
+    
+}
+#condition {
+    width: 900px; 
+    margin: 20px; 
+    text-align: center; 
+    padding-bottom: 20px;
+    padding-top: 20px;
+}
+
+.noneSmall {display: none;}
+
+.small {width: 30px; font-size: 10px; background: coral;}

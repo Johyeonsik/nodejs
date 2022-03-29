@@ -1,0 +1,21 @@
+var express = require('express');
+var router = express.Router();
+
+var db=require('../db');
+/*상품목록 json데이터*/
+router.get('/list', function(req, res, next) {
+    var page=req.query.page;
+    var start=(page-1)*4;
+    //전체 데이타 갯수
+    var sql = 'select count(*) tot from tbl_product';
+    db.get().query(sql,function(err,rows){
+        var tot = rows[0].tot;
+        var sql = `select *,format(price,0) fprice from tbl_product order by code desc limit ${start},4`;
+        db.get().query(sql,function(err,rows){
+        res.send({rows:rows,tot:tot});
+    });
+
+  });
+});
+
+module.exports = router;

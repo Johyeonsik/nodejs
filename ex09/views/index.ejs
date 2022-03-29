@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/common.css' />
+    <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.js"></script>
+  </head>
+  <body>
+      <div id = "page">
+        <div id = "top">
+          <h3>밀키트 쇼핑몰</h3>
+          <img src = "/images/back.jpg" width="960">
+        </div>
+        <div id = "menu">
+          <a href="/">Home</a>
+          <% if(userid==null){ %>
+            <a href="/users/login" style="float: right;">로그인</a>
+          <% }else { %>
+            <span style="float: right; color: coral;"><span style="font-weight: 900;"><%=userid%></span>&nbsp;&nbsp;&nbsp;
+            <a href="/users/logout" style="float: right;">로그아웃</a></span>
+          <% } %>
+        </div>
+        </div>
+        </div>
+        <div id = "center">
+          <%-include(pageName)%>
+        </div>
+        <div id = "bottom">
+          <h5>Copyright 2022.인천일보아카데미 All Rights Reserved</h5>
+        </div>
+      </div>
+  </body>
+</html>

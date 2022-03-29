@@ -1,0 +1,111 @@
+<style>
+    #box{
+        width: 960px;
+        overflow: hidden;
+        margin: 0px auto;
+        border: 1px solid grey;
+    }
+        
+    #box img{
+        width: 500px;
+    }
+    #image{
+        width: 550px;
+        float: left;
+    }
+    #info{
+        width: 400px;
+        float: left;
+    }
+    .p{
+        margin-top: 30px;
+    }
+</style>
+<h3>상품정보</h3>
+<div id ="box">
+    <div id = "image">
+        <img src = "/images/<%=vo.image%>">
+    </div>
+    <div id = "info">
+        <div><h2 style="font-weight: bold; margin-top: 10px;"><%=vo.title%></h4></div>
+        <div style="font-weight: bold; margin-top: 10px;">가격: <%=vo.fprice%>원</div>
+        <p class= "p">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</p>
+        
+        <div id = "button" style="margin: 0px auto;">
+            <button>바로구매</button>
+            <button>장바구니</button>
+        </div>
+    </div>
+</div>
+<hr>
+<h3><%=vo.title%>의 리뷰목록</h3>
+<table>
+    <% if (userid==null) {%>
+    <tr>
+        <td width = 650>리뷰를 작성하시려면 <a href="/users/login">로그인</a> 하세요</td>
+    </tr>
+    <% }else { %>
+        <tr>
+            <td><textarea rows="5" cols="50" id="text"></textarea>
+            <button id="btnInsert">리뷰 등록</button></td>
+        </tr>
+    <% } %>
+</table>
+<table id = "review" style="border-radius: 10px;"></table>
+<script id="temp" type="text/x-handlebars-template">
+{{#each .}}
+<tr>
+    <td width=100 class="title">작성자</td> 
+    <td width=200>{{uid}}</td>
+    <td width=100 class="title">작성일</td> 
+    <td width=200>{{fdate}}</td>
+</tr>
+<tr>
+    <td colspan="4" style="text-align: center; font-weight: bold;">    {{text}}    
+        <button id ="tbnDelete" class="small" style="float: right; width: 50px; height: 25px; background: rgb(218, 165, 255);" >삭제</button>
+    </td>
+    
+</tr>
+
+{{/each}}
+</script>
+
+<script>
+    var code ="<%=vo.code%>";
+    var uid="<%=userid%>";
+    getReview();
+
+    $("#btnInsert").on("click",function(){
+        var text=$("#text").val();
+        if(text==""){
+            alert("내용을 입력하세요");
+            $("#text").focus();
+        }else{
+            if(!confirm(uid + "글을 등록하실래요?")) return;
+            $.ajax({
+                type:"post",
+                data:{code:code, uid:uid, text:text},
+                url:"/review/insert",
+                success:function(){
+                    alert("등록완료")
+                    getReview();
+                    $("#text").val('');
+                }
+            });
+        }
+    });
+    
+    function getReview(){
+        $.ajax({
+            type:"get",
+            dataType:"json",
+            url:"/review/list",
+            data:{code:code},
+            success:function(data){
+                var template = Handlebars.compile($("#temp").html());
+                $("#review").html(template(data));
+            }
+        });
+        
+    }
+</script>
